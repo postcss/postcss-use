@@ -9,10 +9,10 @@ function trim (value) {
 
 module.exports = postcss.plugin('postcss-use', function (opts) {
     opts = opts || {};
-    if (!opts.modules) {
-        throw new Error('postcss-use must be configured with a whitelist of plugins.');
-    }
     return function (css, result) {
+        if (!opts.modules) {
+            throw new Error('postcss-use must be configured with a whitelist of plugins.');
+        }
         css.eachAtRule('use', function (rule) {
             var moduleOpts;
             var module = trim(rule.params);

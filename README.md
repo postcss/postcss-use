@@ -26,7 +26,7 @@ With [postcss-discard-comments]:
 @use postcss-discard-comments(removeAll: true);
 /*! test */
 h1 {
-    color: red;
+    color: red
 }
 ```
 
