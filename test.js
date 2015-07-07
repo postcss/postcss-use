@@ -18,6 +18,11 @@ var tests = [{
     fixture: '@use postcss-discard-font-face(["svg", "woff"]); @font-face { font-family: A; src: url("a.svg") format("svg"), url("a.ttf") format("truetype")}',
     expected: '@font-face { font-family: A; src: url("a.svg") format("svg")}',
     options: {modules: ['postcss-discard-font-face']}
+}, {
+    message: 'should enable cssnext from css',
+    fixture: '@use cssnext; div { filter: blur(4px) }',
+    expected: 'div { filter: url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur stdDeviation="4" /></filter></svg>#filter\'); -webkit-filter: blur(4px); filter: blur(4px) }',
+    options: {modules: ['cssnext']}
 }];
 
 function process (css, options) {

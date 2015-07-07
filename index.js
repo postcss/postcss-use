@@ -44,7 +44,14 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             // Remove any directory traversal
             module = module.replace(/\.\/\\/g, '');
             if (opts.modules && ~opts.modules.indexOf(module)) {
-                result.processor.plugins.push(require(module)(moduleOpts));
+                var module = require(module)(moduleOpts);
+                if (module.plugins) {
+                    module.plugins.forEach(function (plugin) {
+                        result.processor.plugins.push(plugin);
+                    });
+                } else {
+                    result.processor.plugins.push(module);
+                }
             } else {
                 throw new ReferenceError(module + ' is not a valid postcss plugin.');
             }
