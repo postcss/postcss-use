@@ -14,8 +14,8 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             throw new Error('postcss-use must be configured with a whitelist of plugins.');
         }
         css.eachAtRule('use', function (rule) {
-            var moduleOpts;
-            var module = trim(rule.params);
+            var pluginOpts;
+            var plugin = trim(rule.params);
             var match = balanced('(', ')', rule.params);
             if (match) {
                 var body = match.body;
@@ -24,13 +24,13 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
                 }
                 if (!body.indexOf('[')) {
                     if (body.lastIndexOf(']') === body.length - 1) {
-                        moduleOpts = JSON.parse(body);
+                        pluginOpts = JSON.parse(body);
                     } else {
                         throw new SyntaxError('Invalid option "' + body + '"');
                     }
                 } else {
                     body = body.split(';');
-                    moduleOpts = body.reduce(function (config, option) {
+                    pluginOpts = body.reduce(function (config, option) {
                         var parts = option.split(':').map(trim);
                         if (!parts[1]) {
                             throw new SyntaxError('Invalid option "' + parts[0] + '"');
@@ -39,21 +39,21 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
                         return config;
                     }, {});
                 }
-                module = trim(match.pre);
+                plugin = trim(match.pre);
             }
             // Remove any directory traversal
-            module = module.replace(/\.\/\\/g, '');
-            if (opts.modules && ~opts.modules.indexOf(module)) {
-                var module = require(module)(moduleOpts);
-                if (module.plugins) {
-                    module.plugins.forEach(function (plugin) {
+            plugin = plugin.replace(/\.\/\\/g, '');
+            if (opts.modules && ~opts.modules.indexOf(plugin)) {
+                var instance = require(plugin)(pluginOpts);
+                if (instance.plugins) {
+                    instance.plugins.forEach(function (plugin) {
                         result.processor.plugins.push(plugin);
                     });
                 } else {
-                    result.processor.plugins.push(module);
+                    result.processor.plugins.push(instance);
                 }
             } else {
-                throw new ReferenceError(module + ' is not a valid postcss plugin.');
+                throw new ReferenceError(plugin + ' is not a valid postcss plugin.');
             }
             rule.removeSelf();
         });

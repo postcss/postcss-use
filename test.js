@@ -20,8 +20,8 @@ var tests = [{
     options: {modules: ['postcss-discard-font-face']}
 }, {
     message: 'should enable cssnext from css',
-    fixture: '@use cssnext; div { filter: blur(4px) }',
-    expected: 'div { filter: url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur stdDeviation="4" /></filter></svg>#filter\'); -webkit-filter: blur(4px); filter: blur(4px) }',
+    fixture: '@use cssnext(browsers: "firefox < 30"); div { filter: blur(4px) }',
+    expected: 'div { filter: url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur stdDeviation="4" /></filter></svg>#filter\'); filter: blur(4px) }',
     options: {modules: ['cssnext']}
 }];
 
