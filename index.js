@@ -2,6 +2,7 @@
 
 var postcss = require('postcss');
 var balanced = require('balanced-match');
+var util = require('util');
 
 function trim (value) {
     return value.trim();
@@ -17,6 +18,16 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             var pluginOpts;
             var plugin = trim(rule.params);
             var match = balanced('(', ')', rule.params);
+            if (!match && ~rule.params.indexOf('(')) {
+                var params = rule.params + ';';
+                var next = rule.next();
+                while (next && next.type === 'decl') {
+                    params += String(next);
+                    next = next.next();
+                    next.prev().removeSelf();
+                }
+                match = balanced('(', ')', params);
+            }
             if (match) {
                 var body = match.body;
                 if (~body.indexOf('function')) {

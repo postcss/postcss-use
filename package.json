@@ -13,6 +13,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "autoprefixer": "^5.2.0",
     "cssnext": "^1.8.0",
     "postcss-discard-comments": "^1.2.0",
     "postcss-discard-font-face": "^2.0.0",

@@ -23,6 +23,11 @@ var tests = [{
     fixture: '@use cssnext(browsers: "firefox < 30"); div { filter: blur(4px) }',
     expected: 'div { filter: url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur stdDeviation="4" /></filter></svg>#filter\'); filter: blur(4px) }',
     options: {modules: ['cssnext']}
+}, {
+    message: 'should enable autoprefixer from css',
+    fixture: '@use autoprefixer (remove: false; browsers: "> 1%, firefox 32");main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
+    expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;}',
+    options: {modules: ['autoprefixer']}
 }];
 
 function process (css, options) {
