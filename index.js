@@ -8,6 +8,24 @@ function trim (value) {
     return value.trim();
 }
 
+function pluginOptsFromRule (rule) {
+    var options = {};
+    var index = -1;
+    var node;
+    while (node = rule.nodes && rule.nodes[++index]) {
+        if (node.type === 'decl') {
+            try {
+                options[node.prop] = JSON.parse(node.value);
+            } catch (e) {
+                options[node.prop] = node.value;
+            }
+        } else if (node.type === 'rule') {
+            options[node.selector] = pluginOptsFromRule(node);
+        }
+    }
+    return options;
+}
+
 module.exports = postcss.plugin('postcss-use', function (opts) {
     opts = opts || {};
     return function (css, result) {
@@ -18,15 +36,19 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             var pluginOpts;
             var plugin = trim(rule.params);
             var match = balanced('(', ')', rule.params);
-            if (!match && ~rule.params.indexOf('(')) {
-                var params = rule.params + ';';
-                var next = rule.next();
-                while (next && next.type === 'decl') {
-                    params += String(next);
-                    next = next.next();
-                    next.prev().removeSelf();
+            if (!match) {
+                if (~rule.params.indexOf('(')) {
+                    var params = rule.params + ';';
+                    var next = rule.next();
+                    while (next && next.type === 'decl') {
+                        params += String(next);
+                        next = next.next();
+                        next.prev().removeSelf();
+                    }
+                    match = balanced('(', ')', params);
+                } else {
+                    pluginOpts = pluginOptsFromRule(rule);
                 }
-                match = balanced('(', ')', params);
             }
             if (match) {
                 var body = match.body;
