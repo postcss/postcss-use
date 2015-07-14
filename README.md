@@ -32,14 +32,6 @@ h1 {
 }
 ```
 
-### Output
-
-```css
-h1 {
-    color: red
-}
-```
-
 #### Alternative syntax
 
 You may also use configuration blocks that are more *CSS-like*. Note that array
@@ -48,6 +40,14 @@ options cannot be parsed by this method.
 ```css
 @use postcss-discard-comments {
     removeAll: true
+}
+```
+
+### Output
+
+```css
+h1 {
+    color: red
 }
 ```
 
