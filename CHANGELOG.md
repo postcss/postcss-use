@@ -1,3 +1,7 @@
+# 1.1.0
+
+* Adds a more *CSS-like* block syntax - `@use {option: value}`.
+
 # 1.0.2
 
 * Fixes a crash when multiple options were specified.
