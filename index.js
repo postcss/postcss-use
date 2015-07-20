@@ -76,7 +76,7 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             }
             // Remove any directory traversal
             plugin = plugin.replace(/\.\/\\/g, '');
-            if (opts.modules && ~opts.modules.indexOf(plugin)) {
+            if (~opts.modules.indexOf(plugin) || opts.modules === '*') {
                 var instance = require(plugin)(pluginOpts);
                 if (instance.plugins) {
                     instance.plugins.forEach(function (plugin) {

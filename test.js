@@ -4,6 +4,11 @@ var plugin = require('./');
 var name = require('./package.json').name;
 
 var tests = [{
+    message: 'should enable all modules from css',
+    fixture: '/* test comment */@use postcss-discard-comments;/* test comment */',
+    expected: '',
+    options: {modules: '*'}
+}, {
     message: 'should enable postcss-discard-comments from css',
     fixture: '/* test comment */@use postcss-discard-comments;/* test comment */',
     expected: '',
@@ -54,7 +59,7 @@ test(name, function (t) {
 });
 
 test('exception handling', function (t) {
-    t.plan(4);
+    t.plan(7);
     t.throws(function () {
         return process('@use postcss-discard-comments(function () { alert(1); })', {modules: ['postcss-discard-comments']});
     }, 'does not support function syntax');
@@ -67,6 +72,15 @@ test('exception handling', function (t) {
     t.throws(function () {
         return process('@use postcss-discard-comments;');
     }, 'does not support plugins that are not whitelisted');
+    t.throws(function () {
+        return process('@use postcss-discard-comments;', {modules: null});
+    }, 'does not support null');
+    t.throws(function () {
+        return process('@use postcss-discard-comments;', {modules: false});
+    }, 'does not support false');
+    t.throws(function () {
+        return process('@use postcss-discard-comments;', {modules: 'all'});
+    }, 'does not support strings that are not "*"');
 });
 
 test('should use the postcss plugin api', function (t) {

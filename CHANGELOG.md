@@ -1,3 +1,9 @@
+# 1.2.0
+
+* Adds `'*'` as a legal value to `modules`, to lift the restrictions on
+  whitelisting module loading. This is to enable use cases for postcss-use
+  outside browser environments.
+
 # 1.1.0
 
 * Adds a more *CSS-like* block syntax - `@use {option: value}`.

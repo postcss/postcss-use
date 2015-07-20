@@ -59,7 +59,7 @@ h1 {
 
 ##### modules
 
-Type: `array`
+Type: `array|string`
 *Required option*.
 
 You must specify this array of postcss plugins to use, for security purposes.
@@ -68,6 +68,10 @@ This prevents malicious usage of postcss-use in browser environments.
 ```js
 postcss([ use({ modules: ['autoprefixer', 'cssnano', 'cssnext']}) ]);
 ```
+
+Note that you may also set this option to `'*'` to disable whitelisting of
+modules. This is not recommended for environments where you may be accepting
+arbitrary user input; use at your own risk.
 
 ## Usage
 
