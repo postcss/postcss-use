@@ -1,3 +1,8 @@
+# 1.2.1
+
+* Fixes a behaviour where plugins would be loaded/unloaded globally instead of
+  per-file.
+
 # 1.2.0
 
 * Adds `'*'` as a legal value to `modules`, to lift the restrictions on
