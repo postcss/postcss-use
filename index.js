@@ -32,6 +32,7 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
         if (!opts.modules) {
             throw new Error('postcss-use must be configured with a whitelist of plugins.');
         }
+        let origin = result.processor.plugins.slice();
         css.eachAtRule('use', function (rule) {
             var pluginOpts;
             var plugin = trim(rule.params);
@@ -89,6 +90,9 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
                 throw new ReferenceError(plugin + ' is not a valid postcss plugin.');
             }
             rule.removeSelf();
+        });
+        result.processor.plugins.push(function (css, result) {
+            result.processor.plugins = origin;
         });
     };
 });

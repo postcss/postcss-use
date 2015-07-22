@@ -58,6 +58,20 @@ test(name, function (t) {
     });
 });
 
+test('multiple runs', function (t) {
+    t.plan(2);
+
+    var processor = postcss(plugin({modules: ['postcss-discard-comments']}));
+
+    processor.process('@use postcss-discard-comments;/*test*/').then(function (result) {
+        t.equal(result.css, '');
+    });
+
+    processor.process('/*test*/').then(function (result) {
+        t.equal(result.css, '/*test*/');
+    });
+});
+
 test('exception handling', function (t) {
     t.plan(7);
     t.throws(function () {
