@@ -91,8 +91,10 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             }
             rule.removeSelf();
         });
-        result.processor.plugins.push(function (css, result) {
-            result.processor.plugins = origin;
-        });
+        result.processor.plugins.push(postcss.plugin('postcss-use#reset', function () {
+            return function (css, result) {
+                result.processor.plugins = origin;
+            }
+        })());
     };
 });
