@@ -1,6 +1,6 @@
 {
   "name": "postcss-use",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "Enable PostCSS plugins directly in your stylesheet.",
   "main": "index.js",
   "scripts": {
