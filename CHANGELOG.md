@@ -1,3 +1,7 @@
+# 2.0.0
+
+* Changes: Use PostCSS 5.0 API(Fix[#5](https://github.com/postcss/postcss-use/issues/5)).
+
 # 1.2.1
 
 * Fixes a behaviour where plugins would be loaded/unloaded globally instead of
