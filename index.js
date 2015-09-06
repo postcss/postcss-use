@@ -33,7 +33,7 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             throw new Error('postcss-use must be configured with a whitelist of plugins.');
         }
         var origin = result.processor.plugins.slice();
-        css.eachAtRule('use', function (rule) {
+        css.walkAtRules('use', function (rule) {
             var pluginOpts;
             var plugin = trim(rule.params);
             var match = balanced('(', ')', rule.params);

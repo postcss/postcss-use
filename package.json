@@ -1,6 +1,6 @@
 {
   "name": "postcss-use",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "Enable PostCSS plugins directly in your stylesheet.",
   "main": "index.js",
   "scripts": {
@@ -13,10 +13,10 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^5.2.0",
-    "cssnext": "^1.8.0",
-    "postcss-discard-comments": "^1.2.0",
-    "postcss-discard-font-face": "^2.0.0",
+    "autoprefixer": "^6.0.0",
+    "cssnext": "^1.8.4",
+    "postcss-discard-comments": "^2.0.0",
+    "postcss-discard-font-face": "^2.1.0",
     "tap-spec": "^2.2.2",
     "tape": "^3.5.0"
   },
@@ -29,6 +29,6 @@
   "repository": "ben-eb/postcss-use",
   "dependencies": {
     "balanced-match": "^0.2.0",
-    "postcss": "^4.1.11"
+    "postcss": "^5.0.4"
   }
 }
