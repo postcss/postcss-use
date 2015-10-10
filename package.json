@@ -26,7 +26,7 @@
     "email": "beneb.info@gmail.com",
     "url": "http://beneb.info"
   },
-  "repository": "ben-eb/postcss-use",
+  "repository": "postcss/postcss-use",
   "dependencies": {
     "balanced-match": "^0.2.0",
     "postcss": "^5.0.4"
