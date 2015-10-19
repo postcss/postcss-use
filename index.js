@@ -2,7 +2,6 @@
 
 var postcss = require('postcss');
 var balanced = require('balanced-match');
-var util = require('util');
 
 function trim (value) {
     return value.trim();
@@ -12,7 +11,8 @@ function pluginOptsFromRule (rule) {
     var options = {};
     var index = -1;
     var node;
-    while (node = rule.nodes && rule.nodes[++index]) {
+    // Extra parentheses to fix JSHint
+    while ((node = rule.nodes && rule.nodes[++index])) {
         if (node.type === 'decl') {
             try {
                 options[node.prop] = JSON.parse(node.value);
@@ -94,7 +94,7 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
         result.processor.plugins.push(postcss.plugin('postcss-use#reset', function () {
             return function (css, result) {
                 result.processor.plugins = origin;
-            }
+            };
         })());
     };
 });
