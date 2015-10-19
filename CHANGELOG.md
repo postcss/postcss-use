@@ -1,3 +1,9 @@
+# 2.0.1
+
+* Corrected repository link (thanks to @MoOx).
+* Reduced size of package with npm files filter (thanks to @TrySound).
+* Fixed lint errors.
+
 # 2.0.0
 
 * Changes: Use PostCSS 5.0 API(Fix[#5](https://github.com/postcss/postcss-use/issues/5)).
