@@ -3,6 +3,9 @@
   "version": "2.0.0",
   "description": "Enable PostCSS plugins directly in your stylesheet.",
   "main": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "tape test.js | tap-spec"
   },
@@ -13,12 +16,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^6.0.0",
+    "autoprefixer": "^6.0.3",
     "cssnext": "^1.8.4",
-    "postcss-discard-comments": "^2.0.0",
+    "postcss-discard-comments": "^2.0.2",
     "postcss-discard-font-face": "^2.1.0",
-    "tap-spec": "^2.2.2",
-    "tape": "^3.5.0"
+    "tap-spec": "^4.1.0",
+    "tape": "^4.2.1"
   },
   "homepage": "https://github.com/postcss/postcss-use",
   "author": {
@@ -29,6 +32,6 @@
   "repository": "postcss/postcss-use",
   "dependencies": {
     "balanced-match": "^0.2.0",
-    "postcss": "^5.0.4"
+    "postcss": "^5.0.10"
   }
 }
