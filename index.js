@@ -44,7 +44,7 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
                     while (next && next.type === 'decl') {
                         params += String(next);
                         next = next.next();
-                        next.prev().removeSelf();
+                        next.prev().remove();
                     }
                     match = balanced('(', ')', params);
                 } else {
@@ -89,7 +89,7 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             } else {
                 throw new ReferenceError(plugin + ' is not a valid postcss plugin.');
             }
-            rule.removeSelf();
+            rule.remove();
         });
         result.processor.plugins.push(postcss.plugin('postcss-use#reset', function () {
             return function (css, result) {
