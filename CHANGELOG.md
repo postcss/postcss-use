@@ -1,3 +1,8 @@
+# 2.0.2
+
+* postcss-use no longer uses the old `Node#removeSelf` method from PostCSS 4,
+  replaced with `Node#remove` (thanks to @TrySound).
+
 # 2.0.1
 
 * Corrected repository link (thanks to @MoOx).
