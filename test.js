@@ -1,4 +1,6 @@
-var test = require('tape');
+'use strict';
+
+var tape = require('tape');
 var postcss = require('postcss');
 var plugin = require('./');
 var name = require('./package.json').name;
@@ -24,24 +26,19 @@ var tests = [{
     expected: '@font-face { font-family: A; src: url("a.svg") format("svg")}',
     options: {modules: ['postcss-discard-font-face']}
 }, {
-    message: 'should enable cssnext from css',
-    fixture: '@use cssnext(browsers: "firefox < 30"); div { filter: blur(4px) }',
-    expected: 'div { filter: url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur stdDeviation="4" /></filter></svg>#filter\'); filter: blur(4px) }',
-    options: {modules: ['cssnext']}
-}, {
     message: 'should enable autoprefixer from css',
     fixture: '@use autoprefixer (remove: false; browsers: "> 1%, firefox 32");main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
     expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:flex;}',
     options: {modules: ['autoprefixer']}
 }, {
     message: 'should enable autoprefixer from css, with nested options',
-    fixture: '@use autoprefixer { remove: false; browsers: > 1%, firefox 32 };main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
-    expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:flex;}',
+    fixture: '@use autoprefixer { remove: false; browsers: > 0%, firefox 32 };main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
+    expected: 'main{-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;}',
     options: {modules: ['autoprefixer']}
 }, {
     message: 'should enable autoprefixer from css, with nested stringy options',
-    fixture: '@use autoprefixer { remove: false; browsers: "> 1%, firefox 32" };main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
-    expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:flex;}',
+    fixture: '@use autoprefixer { remove: false; browsers: "> 0%, firefox 32" };main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
+    expected: 'main{-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;}',
     options: {modules: ['autoprefixer']}
 }];
 
@@ -49,7 +46,7 @@ function process (css, options) {
     return postcss(plugin(options)).process(css).css;
 }
 
-test(name, function (t) {
+tape(name, function (t) {
     t.plan(tests.length);
 
     tests.forEach(function (test) {
@@ -58,7 +55,7 @@ test(name, function (t) {
     });
 });
 
-test('multiple runs', function (t) {
+tape('multiple runs', function (t) {
     t.plan(2);
 
     var processor = postcss(plugin({modules: ['postcss-discard-comments']}));
@@ -72,7 +69,7 @@ test('multiple runs', function (t) {
     });
 });
 
-test('exception handling', function (t) {
+tape('exception handling', function (t) {
     t.plan(7);
     t.throws(function () {
         return process('@use postcss-discard-comments(function () { alert(1); })', {modules: ['postcss-discard-comments']});
@@ -97,7 +94,7 @@ test('exception handling', function (t) {
     }, 'does not support strings that are not "*"');
 });
 
-test('should use the postcss plugin api', function (t) {
+tape('should use the postcss plugin api', function (t) {
     t.plan(2);
     t.ok(plugin().postcssVersion, 'should be able to access version');
     t.equal(plugin().postcssPlugin, name, 'should be able to access name');
