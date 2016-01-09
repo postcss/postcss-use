@@ -80,8 +80,8 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             if (~opts.modules.indexOf(plugin) || opts.modules === '*') {
                 var instance = require(plugin)(pluginOpts);
                 if (instance.plugins) {
-                    instance.plugins.forEach(function (plugin) {
-                        result.processor.plugins.push(plugin);
+                    instance.plugins.forEach(function (p) {
+                        result.processor.plugins.push(p);
                     });
                 } else {
                     result.processor.plugins.push(instance);
@@ -92,8 +92,8 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             rule.remove();
         });
         result.processor.plugins.push(postcss.plugin('postcss-use#reset', function () {
-            return function (css, result) {
-                result.processor.plugins = origin;
+            return function (styles, res) {
+                res.processor.plugins = origin;
             };
         })());
     };

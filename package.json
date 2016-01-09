@@ -16,12 +16,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^6.0.3",
-    "cssnext": "^1.8.4",
-    "postcss-discard-comments": "^2.0.2",
+    "autoprefixer": "^6.2.3",
+    "eslint": "^1.10.3",
+    "postcss-discard-comments": "^2.0.3",
     "postcss-discard-font-face": "^2.1.0",
-    "tap-spec": "^4.1.0",
-    "tape": "^4.2.1"
+    "tap-spec": "^4.1.1",
+    "tape": "^4.4.0"
   },
   "homepage": "https://github.com/postcss/postcss-use",
   "author": {
@@ -31,7 +31,7 @@
   },
   "repository": "postcss/postcss-use",
   "dependencies": {
-    "balanced-match": "^0.2.0",
-    "postcss": "^5.0.10"
+    "balanced-match": "^0.3.0",
+    "postcss": "^5.0.14"
   }
 }
