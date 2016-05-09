@@ -81,7 +81,7 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             plugin = plugin.replace(/\.\/\\/g, '');
             if (~opts.modules.indexOf(plugin) || opts.modules === '*') {
                 var pluginPath;
-                if (opts.resolvePluginsRelativeToFile && rule.source.input.file) {
+                if (opts.resolveFromFile && rule.source.input.file) {
                     pluginPath = resolveFrom(path.dirname(rule.source.input.file), plugin);
                 }
 

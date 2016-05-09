@@ -102,11 +102,11 @@ tape('should use the postcss plugin api', function (t) {
     t.equal(plugin().postcssPlugin, name, 'should be able to access name');
 });
 
-tape('should use plugins relative to CSS file when using resolvePluginsRelativeToFile', function (t) {
+tape('should use plugins relative to CSS file when using resolveFromFile', function (t) {
     var inputFile = path.join(__dirname, 'fixtures', 'test.css');
     var outputFile = path.join(__dirname, 'fixtures', 'test.out.css');
     var inputCss = fs.readFileSync(inputFile);
-    postcss(plugin({modules: '*', resolvePluginsRelativeToFile: true})).process(inputCss, {
+    postcss(plugin({modules: '*', resolveFromFile: true})).process(inputCss, {
         from: inputFile,
         to: outputFile
     }).then(function (result) {
