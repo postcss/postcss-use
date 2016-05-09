@@ -1,3 +1,7 @@
+# 2.1.0
+
+* Added `resolveFromFile` option (thanks to @rexxars).
+
 # 2.0.2
 
 * postcss-use no longer uses the old `Node#removeSelf` method from PostCSS 4,
