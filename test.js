@@ -1,5 +1,7 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
 var tape = require('tape');
 var postcss = require('postcss');
 var plugin = require('./');
@@ -28,7 +30,7 @@ var tests = [{
 }, {
     message: 'should enable autoprefixer from css',
     fixture: '@use autoprefixer (remove: false; browsers: "> 1%, firefox 32");main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
-    expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:flex;}',
+    expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:flex;}',
     options: {modules: ['autoprefixer']}
 }, {
     message: 'should enable autoprefixer from css, with nested options',
@@ -98,4 +100,32 @@ tape('should use the postcss plugin api', function (t) {
     t.plan(2);
     t.ok(plugin().postcssVersion, 'should be able to access version');
     t.equal(plugin().postcssPlugin, name, 'should be able to access name');
+});
+
+tape('should use plugins relative to CSS file when using resolveFromFile', function (t) {
+    var inputFile = path.join(__dirname, 'fixtures', 'test.css');
+    var outputFile = path.join(__dirname, 'fixtures', 'test.out.css');
+    var inputCss = fs.readFileSync(inputFile);
+    postcss(plugin({modules: '*', resolveFromFile: true})).process(inputCss, {
+        from: inputFile,
+        to: outputFile
+    }).then(function (result) {
+        t.equal(result.css, '.foo {color: red;}\n', 'should remove background decls');
+        t.end();
+    }).catch(t.ifError);
+});
+
+tape('should not resolve plugins relative to CSS file by default', function (t) {
+    var inputFile = path.join(__dirname, 'fixtures', 'test.css');
+    var outputFile = path.join(__dirname, 'fixtures', 'test.out.css');
+    var inputCss = fs.readFileSync(inputFile);
+    postcss(plugin({modules: '*'})).process(inputCss, {
+        from: inputFile,
+        to: outputFile
+    }).then(function () {
+        t.fail('Should fail when referencing plugin that is not installed');
+    }).catch(function (err) {
+        t.equal(err.message, 'Cannot find module \'postcss-nobg\'');
+        t.end();
+    });
 });

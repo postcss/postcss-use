@@ -31,7 +31,8 @@
   },
   "repository": "postcss/postcss-use",
   "dependencies": {
-    "balanced-match": "^0.3.0",
-    "postcss": "^5.0.14"
+    "balanced-match": "^0.4.1",
+    "postcss": "^5.0.21",
+    "resolve-from": "^2.0.0"
   }
 }
