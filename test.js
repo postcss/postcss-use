@@ -28,7 +28,7 @@ var tests = [{
 }, {
     message: 'should enable autoprefixer from css',
     fixture: '@use autoprefixer (remove: false; browsers: "> 1%, firefox 32");main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
-    expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:flex;}',
+    expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:flex;}',
     options: {modules: ['autoprefixer']}
 }, {
     message: 'should enable autoprefixer from css, with nested options',
