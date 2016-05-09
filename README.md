@@ -73,6 +73,16 @@ Note that you may also set this option to `'*'` to disable whitelisting of
 modules. This is not recommended for environments where you may be accepting
 arbitrary user input; use at your own risk.
 
+##### resolvePluginsRelativeToFile
+
+Type: `boolean` (default: `false`)
+
+Set this to true in order to resolve plugins relative to the file that referenced them. This enables the usage of different versions of the same plugin, for instance.
+
+```js
+postcss([ use({ resolvePluginsRelativeToFile: true, modules: '*' }) ]);
+```
+
 ## Usage
 
 See the [PostCSS documentation](https://github.com/postcss/postcss#usage) for

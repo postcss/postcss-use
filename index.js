@@ -1,7 +1,9 @@
 'use strict';
 
+var path = require('path');
 var postcss = require('postcss');
 var balanced = require('balanced-match');
+var resolveFrom = require('resolve-from');
 
 function trim (value) {
     return value.trim();
@@ -78,7 +80,12 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             // Remove any directory traversal
             plugin = plugin.replace(/\.\/\\/g, '');
             if (~opts.modules.indexOf(plugin) || opts.modules === '*') {
-                var instance = require(plugin)(pluginOpts);
+                var pluginPath;
+                if (opts.resolvePluginsRelativeToFile && rule.source.input.file) {
+                    pluginPath = resolveFrom(path.dirname(rule.source.input.file), plugin);
+                }
+
+                var instance = require(pluginPath || plugin)(pluginOpts);
                 if (instance.plugins) {
                     instance.plugins.forEach(function (p) {
                         result.processor.plugins.push(p);
