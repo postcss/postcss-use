@@ -77,7 +77,9 @@ arbitrary user input; use at your own risk.
 
 Type: `boolean` (default: `false`)
 
-Set this to true in order to resolve plugins relative to the file that referenced them. This enables the usage of different versions of the same plugin, for instance.
+Set this to true in order to resolve plugins relative to the file that
+referenced them. This enables the usage of different versions of the same
+plugin, for instance.
 
 ```js
 postcss([ use({ resolveFromFile: true, modules: '*' }) ]);

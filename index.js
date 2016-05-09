@@ -80,12 +80,12 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
             // Remove any directory traversal
             plugin = plugin.replace(/\.\/\\/g, '');
             if (~opts.modules.indexOf(plugin) || opts.modules === '*') {
-                var pluginPath;
+                var pluginPath = plugin;
                 if (opts.resolveFromFile && rule.source.input.file) {
                     pluginPath = resolveFrom(path.dirname(rule.source.input.file), plugin);
                 }
 
-                var instance = require(pluginPath || plugin)(pluginOpts);
+                var instance = require(pluginPath)(pluginOpts);
                 if (instance.plugins) {
                     instance.plugins.forEach(function (p) {
                         result.processor.plugins.push(p);
