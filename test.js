@@ -115,6 +115,21 @@ tape('should use plugins relative to CSS file when using resolveFromFile', funct
     }).catch(t.ifError);
 });
 
+tape('should give meaningful error when module is not found', function (t) {
+    var inputFile = path.join(__dirname, 'fixtures', 'error.css');
+    var outputFile = path.join(__dirname, 'fixtures', 'error.out.css');
+    var inputCss = fs.readFileSync(inputFile);
+    postcss(plugin({modules: '*', resolveFromFile: true})).process(inputCss, {
+        from: inputFile,
+        to: outputFile
+    }).then(function () {
+        t.fail('Should fail when referencing plugin that is not installed');
+    }).catch(function (err) {
+        t.equal(err.message, 'Cannot find module \'postcss-fourohfour\'');
+        t.end();
+    });
+});
+
 tape('should not resolve plugins relative to CSS file by default', function (t) {
     var inputFile = path.join(__dirname, 'fixtures', 'test.css');
     var outputFile = path.join(__dirname, 'fixtures', 'test.out.css');

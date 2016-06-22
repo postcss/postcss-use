@@ -1,0 +1,3 @@
+@use postcss-fourohfour;
+
+.foo {background: blue;color: red;}
