@@ -1,3 +1,9 @@
+# 2.2.0
+
+* postcss-use will now throw a more descriptive error when failing to load a
+  plugin via the `resolveFromFile` option (thanks to @rexxars).
+* Now compiled with Babel 6.
+
 # 2.1.0
 
 * Added `resolveFromFile` option (thanks to @rexxars).
