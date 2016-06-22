@@ -85,6 +85,10 @@ module.exports = postcss.plugin('postcss-use', function (opts) {
                     pluginPath = resolveFrom(path.dirname(rule.source.input.file), plugin);
                 }
 
+                if (!pluginPath) {
+                    throw new Error('Cannot find module \'' + plugin + '\'');
+                }
+
                 var instance = require(pluginPath)(pluginOpts);
                 if (instance.plugins) {
                     instance.plugins.forEach(function (p) {
