@@ -1,0 +1,80 @@
+{
+  "projectName": "postcss-use",
+  "projectOwner": "postcss",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "ben-eb",
+      "name": "Ben Briggs",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1282980?v=3",
+      "profile": "http://beneb.info",
+      "contributions": [
+        "code",
+        "doc",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "jonathantneal",
+      "name": "Jonathan Neal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/188426?v=3",
+      "profile": "//jonathantneal.com",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "yisibl",
+      "name": "一丝",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2784308?v=3",
+      "profile": "www.iyunlu.com/view",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MoOx",
+      "name": "Maxime Thirouin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/157534?v=3",
+      "profile": "https://moox.io/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "TrySound",
+      "name": "Bogdan Chadkin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5635476?v=3",
+      "profile": "https://github.com/TrySound",
+      "contributions": [
+        "doc",
+        "review"
+      ]
+    },
+    {
+      "login": "rexxars",
+      "name": "Espen Hovlandsdal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/48200?v=3",
+      "profile": "https://espen.codes/",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "ai",
+      "name": "Andrey Sitnik",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19343?v=3",
+      "profile": "http://sitnik.ru",
+      "contributions": [
+        "review"
+      ]
+    }
+  ]
+}

@@ -90,15 +90,24 @@ postcss([ use({ resolveFromFile: true, modules: '*' }) ]);
 See the [PostCSS documentation](https://github.com/postcss/postcss#usage) for
 examples for your environment.
 
-## Contributing
+## Contributors
 
-Pull requests are welcome. If you add functionality, then please add unit tests
-to cover it.
+Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+| [<img src="https://avatars.githubusercontent.com/u/1282980?v=3" width="100px;"/><br /><sub>Ben Briggs</sub>](http://beneb.info)<br />[💻](https://github.com/postcss/postcss-use/commits?author=ben-eb) [📖](https://github.com/postcss/postcss-use/commits?author=ben-eb) 👀 [⚠️](https://github.com/postcss/postcss-use/commits?author=ben-eb) | [<img src="https://avatars.githubusercontent.com/u/188426?v=3" width="100px;"/><br /><sub>Jonathan Neal</sub>](//jonathantneal.com)<br />[💻](https://github.com/postcss/postcss-use/commits?author=jonathantneal) [⚠️](https://github.com/postcss/postcss-use/commits?author=jonathantneal) | [<img src="https://avatars.githubusercontent.com/u/2784308?v=3" width="100px;"/><br /><sub>一丝</sub>](www.iyunlu.com/view)<br />[💻](https://github.com/postcss/postcss-use/commits?author=yisibl) | [<img src="https://avatars.githubusercontent.com/u/157534?v=3" width="100px;"/><br /><sub>Maxime Thirouin</sub>](https://moox.io/)<br />[📖](https://github.com/postcss/postcss-use/commits?author=MoOx) | [<img src="https://avatars.githubusercontent.com/u/5635476?v=3" width="100px;"/><br /><sub>Bogdan Chadkin</sub>](https://github.com/TrySound)<br />[📖](https://github.com/postcss/postcss-use/commits?author=TrySound) 👀 | [<img src="https://avatars.githubusercontent.com/u/48200?v=3" width="100px;"/><br /><sub>Espen Hovlandsdal</sub>](https://espen.codes/)<br />[💻](https://github.com/postcss/postcss-use/commits?author=rexxars) [⚠️](https://github.com/postcss/postcss-use/commits?author=rexxars) | [<img src="https://avatars.githubusercontent.com/u/19343?v=3" width="100px;"/><br /><sub>Andrey Sitnik</sub>](http://sitnik.ru)<br />👀 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors] specification. Contributions of
+any kind welcome!
 
 ## License
 
 MIT © [Ben Briggs](http://beneb.info)
 
+
+[all-contributors]: https://github.com/kentcdodds/all-contributors
 [ci]:      https://travis-ci.org/postcss/postcss-use
 [postcss]: https://github.com/postcss/postcss
 [postcss-discard-comments]: https://github.com/ben-eb/postcss-discard-comments
