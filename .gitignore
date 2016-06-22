@@ -1,3 +1,6 @@
+.nyc_output
+coverage
+dist
 node_modules
-!fixtures/node_modules
+!src/__tests__/fixtures/node_modules
 npm-debug.log

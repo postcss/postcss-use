@@ -4,10 +4,14 @@
   "description": "Enable PostCSS plugins directly in your stylesheet.",
   "main": "index.js",
   "files": [
-    "index.js"
+    "dist",
+    "LICENSE-MIT"
   ],
   "scripts": {
-    "test": "tape test.js | tap-spec"
+    "pretest": "eslint src/*.js src/__test__/*.js",
+    "prepublish": "del-cli dist && cross-env BABEL_ENV=publish babel src --out-dir dist --ignore /__tests__/",
+    "report": "nyc report --reporter=html",
+    "test": "nyc ava src/__tests__/*.js"
   },
   "keywords": [
     "css",
@@ -17,11 +21,22 @@
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^6.2.3",
-    "eslint": "^1.10.3",
+    "ava": "^0.15.0",
+    "babel-cli": "^6.5.1",
+    "babel-core": "^6.5.1",
+    "babel-plugin-add-module-exports": "^0.2.0",
+    "babel-preset-es2015-loose": "^7.0.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.9.0",
+    "coveralls": "^2.11.6",
+    "cross-env": "^1.0.7",
+    "del-cli": "^0.2.0",
+    "eslint": "^2.13.1",
+    "eslint-config-cssnano": "^2.0.0",
+    "nyc": "^6.0.0",
+    "postcss-cssnext": "^2.6.0",
     "postcss-discard-comments": "^2.0.3",
-    "postcss-discard-font-face": "^2.1.0",
-    "tap-spec": "^4.1.1",
-    "tape": "^4.4.0"
+    "postcss-discard-font-face": "^3.0.0"
   },
   "homepage": "https://github.com/postcss/postcss-use",
   "author": {
@@ -34,5 +49,11 @@
     "balanced-match": "^0.4.1",
     "postcss": "^5.0.21",
     "resolve-from": "^2.0.0"
+  },
+  "ava": {
+    "require": "babel-register"
+  },
+  "eslintConfig": {
+    "extends": "cssnano"
   }
 }
