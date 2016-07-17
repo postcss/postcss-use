@@ -13,7 +13,8 @@
     "pretest": "eslint src/*.js src/__test__/*.js",
     "prepublish": "del-cli dist && cross-env BABEL_ENV=publish babel src --out-dir dist --ignore /__tests__/",
     "report": "nyc report --reporter=html",
-    "test": "nyc ava src/__tests__/*.js"
+    "test": "nyc ava src/__tests__/*.js",
+    "test-012": "nyc ava src/__tests__/*.js"
   },
   "keywords": [
     "css",
@@ -36,6 +37,8 @@
     "del-cli": "^0.2.0",
     "eslint": "^3.1.0",
     "eslint-config-cssnano": "^3.1.2",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-import": "^1.10.3",
     "nyc": "^7.0.0",
     "postcss-cssnext": "^2.6.0",
     "postcss-discard-comments": "^2.0.3",
