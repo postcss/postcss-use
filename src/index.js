@@ -102,7 +102,7 @@ export default postcss.plugin(NAME, (opts = {}) => {
             rule.remove();
         });
         result.processor.plugins.push(postcss.plugin(`${NAME}#reset`, () => {
-            return (styles, res) => res.processor.plugins = origin;
+            return (styles, res) => (res.processor.plugins = origin);
         })());
     };
 });

@@ -9,47 +9,47 @@ const tests = [{
     message: 'should enable all modules from css',
     fixture: '/* test comment */@use postcss-discard-comments;/* test comment */',
     expected: '',
-    options: {modules: '*'}
+    options: {modules: '*'},
 }, {
     message: 'should enable postcss-discard-comments from css',
     fixture: '/* test comment */@use postcss-discard-comments;/* test comment */',
     expected: '',
-    options: {modules: ['postcss-discard-comments']}
+    options: {modules: ['postcss-discard-comments']},
 }, {
     message: 'should enable postcss-discard-comments from css, with options',
     fixture: '/*! license comment */@use postcss-discard-comments(removeAll: true);',
     expected: '',
-    options: {modules: ['postcss-discard-comments']}
+    options: {modules: ['postcss-discard-comments']},
 }, {
     message: 'should enable postcss-discard-font-face from css, with array as options',
     fixture: '@use postcss-discard-font-face(["svg", "woff"]); @font-face { font-family: A; src: url("a.svg") format("svg"), url("a.ttf") format("truetype")}',
     expected: '@font-face { font-family: A; src: url("a.svg") format("svg")}',
-    options: {modules: ['postcss-discard-font-face']}
+    options: {modules: ['postcss-discard-font-face']},
 }, {
     message: 'should enable autoprefixer from css',
     fixture: '@use autoprefixer (remove: false; browsers: "> 1%, firefox 32");main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
     expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:flex;}',
-    options: {modules: ['autoprefixer']}
+    options: {modules: ['autoprefixer']},
 }, {
     message: 'should enable autoprefixer from css, with nested options',
     fixture: '@use autoprefixer { remove: false; browsers: > 0%, firefox 32 };main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
     expected: 'main{-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;}',
-    options: {modules: ['autoprefixer']}
+    options: {modules: ['autoprefixer']},
 }, {
     message: 'should enable autoprefixer from css, with nested stringy options',
     fixture: '@use autoprefixer { remove: false; browsers: "> 0%, firefox 32" };main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
     expected: 'main{-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;}',
-    options: {modules: ['autoprefixer']}
+    options: {modules: ['autoprefixer']},
 }, {
     message: 'should enable autoprefixer from css, with deeply nested options',
     fixture: '@use autoprefixer { remove: false; browsers: "> 0%, firefox 32"; foo: { bar: true } /* ignores comments */ };main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
     expected: 'main{-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;}',
-    options: {modules: ['autoprefixer']}
+    options: {modules: ['autoprefixer']},
 }, {
     message: 'should enable postcss-cssnext',
     fixture: '@use postcss-cssnext;:root{--a: red}h1{color: var(--a)}',
     expected: 'h1{color: red}',
-    options: {modules: ['postcss-cssnext']}
+    options: {modules: ['postcss-cssnext']},
 }];
 
 function process (css, options) {
@@ -96,7 +96,7 @@ test('should use plugins relative to CSS file when using resolveFromFile', t => 
     const inputCss = fs.readFileSync(inputFile);
     return postcss(plugin({modules: '*', resolveFromFile: true})).process(inputCss, {
         from: inputFile,
-        to: outputFile
+        to: outputFile,
     }).then(({css}) => {
         t.deepEqual(css, '.foo {color: red;}\n', 'should remove background decls');
     });
@@ -108,7 +108,7 @@ test('should give meaningful error when module is not found', t => {
     const inputCss = fs.readFileSync(inputFile);
     return postcss(plugin({modules: '*', resolveFromFile: true})).process(inputCss, {
         from: inputFile,
-        to: outputFile
+        to: outputFile,
     }).catch(err => {
         t.deepEqual(err.message, `Cannot find module 'postcss-fourohfour'`);
     });
@@ -120,7 +120,7 @@ test('should not resolve plugins relative to CSS file by default', t => {
     const inputCss = fs.readFileSync(inputFile);
     return postcss(plugin({modules: '*'})).process(inputCss, {
         from: inputFile,
-        to: outputFile
+        to: outputFile,
     }).catch(err => {
         t.deepEqual(err.message, `Cannot find module 'postcss-nobg'`);
     });
