@@ -1,0 +1,9 @@
+@use postcss-nobg(onlyImages: false);
+
+.foo {
+    background-image: url(/foo.jpg);
+}
+
+.bar {
+    background: #bf1942;
+}

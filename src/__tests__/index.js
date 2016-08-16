@@ -125,3 +125,52 @@ test('should not resolve plugins relative to CSS file by default', t => {
         t.deepEqual(err.message, `Cannot find module 'postcss-nobg'`);
     });
 });
+
+test('should be able to specify default options for plugins', t => {
+    const inputFile = path.join(__dirname, 'fixtures', 'test.css');
+    const outputFile = path.join(__dirname, 'fixtures', 'test.out.css');
+    const inputCss = fs.readFileSync(inputFile);
+    const defaultPluginOptions = {
+        nobg: {onlyImages: true},
+    };
+    return postcss(plugin({modules: '*', resolveFromFile: true, defaultPluginOptions})).process(inputCss, {
+        from: inputFile,
+        to: outputFile,
+    }).then(({css}) => {
+        const normalized = css.replace(/\s+/g, ' ').trim();
+        t.deepEqual(normalized, '.foo {background: blue;color: red;}', 'should remove only background image decls');
+    });
+});
+
+test('should be able to override default options', t => {
+    const inputFile = path.join(__dirname, 'fixtures', 'options.css');
+    const outputFile = path.join(__dirname, 'fixtures', 'options.out.css');
+    const inputCss = fs.readFileSync(inputFile);
+    const defaultPluginOptions = {
+        nobg: {onlyImages: true},
+    };
+    return postcss(plugin({modules: '*', resolveFromFile: true, defaultPluginOptions})).process(inputCss, {
+        from: inputFile,
+        to: outputFile,
+    }).then(({css}) => {
+        const normalized = css.replace(/\s+/g, ' ').trim();
+        t.deepEqual(normalized, '.foo { } .bar { }', 'should remove only background image decls');
+    });
+});
+
+test('should use specified options if specified options is not an object', t => {
+    const inputFile = path.join(__dirname, 'fixtures', 'arrayOptions.css');
+    const outputFile = path.join(__dirname, 'fixtures', 'arrayOptions.out.css');
+    const inputCss = fs.readFileSync(inputFile);
+    const defaultPluginOptions = {
+        nobg: {onlyImages: true},
+    };
+    return postcss(plugin({modules: '*', resolveFromFile: true, defaultPluginOptions})).process(inputCss, {
+        from: inputFile,
+        to: outputFile,
+    }).then(({css}) => {
+        const normalized = css.replace(/\s+/g, ' ').trim();
+        const expected = '.foo { background-image: url(/foo.jpg); } .bar { background: #bf1942; }';
+        t.deepEqual(normalized, expected, 'should remove only background-repeat decls');
+    });
+});

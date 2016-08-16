@@ -85,6 +85,25 @@ plugin, for instance.
 postcss([ use({ resolveFromFile: true, modules: '*' }) ]);
 ```
 
+##### defaultPluginOptions
+
+Type: `object` (default: `{}`)
+
+Default options for plugins, keyed by plugin name. If both the default and the specified options are objects, they are merged. Otherwise, the options specified in the CSS are used.
+
+```js
+postcss([
+    use({
+        modules: '*',
+        defaultPluginOptions: {
+            autoprefixer: {
+                browsers: ['> 1%', 'IE 7']
+            }
+        }
+    })
+]);
+```
+
 ## Usage
 
 See the [PostCSS documentation](https://github.com/postcss/postcss#usage) for

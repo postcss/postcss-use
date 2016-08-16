@@ -2,6 +2,7 @@ import path from 'path';
 import postcss from 'postcss';
 import balanced from 'balanced-match';
 import resolveFrom from 'resolve-from';
+import isPlainObject from 'lodash.isplainobject';
 
 const NAME = 'postcss-use';
 
@@ -29,6 +30,16 @@ function pluginOptsFromRule (rule) {
         }
     }
     return options;
+}
+
+function mergePluginOptions (plugin, defaultOpts, specifiedOpts) {
+    // Don't merge anything but objects
+    if (!isPlainObject(specifiedOpts) || !isPlainObject(defaultOpts)) {
+        return specifiedOpts;
+    }
+
+    // If both the default and specified options are plain objects, we can merge them
+    return Object.assign({}, defaultOpts, specifiedOpts);
 }
 
 export default postcss.plugin(NAME, (opts = {}) => {
@@ -88,7 +99,10 @@ export default postcss.plugin(NAME, (opts = {}) => {
                     throw new Error(`Cannot find module '${plugin}'`);
                 }
 
-                let instance = require(pluginPath)(pluginOpts);
+                let optsName = plugin.replace(/^postcss-/, '');
+                let defaultOpts = (opts.defaultPluginOptions && opts.defaultPluginOptions[optsName]) || {};
+                let mergedOptions = mergePluginOptions(optsName, defaultOpts, pluginOpts);
+                let instance = require(pluginPath)(mergedOptions);
                 if (instance.plugins) {
                     instance.plugins.forEach((p) => {
                         result.processor.plugins.push(p);
