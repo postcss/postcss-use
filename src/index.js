@@ -6,18 +6,6 @@ import isPlainObject from 'lodash.isplainobject';
 
 const NAME = 'postcss-use';
 
-const assign = Object.assign || function (target) {
-    for (let i = 1; i < arguments.length; i++) {
-        const source = arguments[i];
-        for (const key in source) {
-            if (Object.prototype.hasOwnProperty.call(source, key)) {
-                target[key] = source[key];
-            }
-        }
-    }
-    return target;
-};
-
 function invalidOption (option) {
     throw new SyntaxError(`Invalid option '${option}'`);
 }
@@ -51,7 +39,7 @@ function mergePluginOptions (plugin, defaultOpts, specifiedOpts) {
     }
 
     // If both the default and specified options are plain objects, we can merge them
-    return assign({}, defaultOpts, specifiedOpts);
+    return {...defaultOpts, ...specifiedOpts};
 }
 
 export default postcss.plugin(NAME, (opts = {}) => {
