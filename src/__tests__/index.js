@@ -130,10 +130,10 @@ test('should be able to specify default options for plugins', t => {
     const inputFile = path.join(__dirname, 'fixtures', 'test.css');
     const outputFile = path.join(__dirname, 'fixtures', 'test.out.css');
     const inputCss = fs.readFileSync(inputFile);
-    const defaultPluginOptions = {
+    const options = {
         nobg: {onlyImages: true},
     };
-    return postcss(plugin({modules: '*', resolveFromFile: true, defaultPluginOptions})).process(inputCss, {
+    return postcss(plugin({modules: '*', resolveFromFile: true, options})).process(inputCss, {
         from: inputFile,
         to: outputFile,
     }).then(({css}) => {
@@ -146,10 +146,10 @@ test('should be able to override default options', t => {
     const inputFile = path.join(__dirname, 'fixtures', 'options.css');
     const outputFile = path.join(__dirname, 'fixtures', 'options.out.css');
     const inputCss = fs.readFileSync(inputFile);
-    const defaultPluginOptions = {
+    const options = {
         nobg: {onlyImages: true},
     };
-    return postcss(plugin({modules: '*', resolveFromFile: true, defaultPluginOptions})).process(inputCss, {
+    return postcss(plugin({modules: '*', resolveFromFile: true, options})).process(inputCss, {
         from: inputFile,
         to: outputFile,
     }).then(({css}) => {
@@ -162,10 +162,10 @@ test('should use specified options if specified options is not an object', t => 
     const inputFile = path.join(__dirname, 'fixtures', 'arrayOptions.css');
     const outputFile = path.join(__dirname, 'fixtures', 'arrayOptions.out.css');
     const inputCss = fs.readFileSync(inputFile);
-    const defaultPluginOptions = {
+    const options = {
         nobg: {onlyImages: true},
     };
-    return postcss(plugin({modules: '*', resolveFromFile: true, defaultPluginOptions})).process(inputCss, {
+    return postcss(plugin({modules: '*', resolveFromFile: true, options})).process(inputCss, {
         from: inputFile,
         to: outputFile,
     }).then(({css}) => {

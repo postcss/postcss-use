@@ -85,7 +85,7 @@ plugin, for instance.
 postcss([ use({ resolveFromFile: true, modules: '*' }) ]);
 ```
 
-##### defaultPluginOptions
+##### options
 
 Type: `object` (default: `{}`)
 
@@ -95,7 +95,7 @@ Default options for plugins, keyed by plugin name. If both the default and the s
 postcss([
     use({
         modules: '*',
-        defaultPluginOptions: {
+        options: {
             autoprefixer: {
                 browsers: ['> 1%', 'IE 7']
             }

@@ -112,7 +112,7 @@ export default postcss.plugin(NAME, (opts = {}) => {
                 }
 
                 let optsName = plugin.replace(/^postcss-/, '');
-                let defaultOpts = (opts.defaultPluginOptions && opts.defaultPluginOptions[optsName]) || {};
+                let defaultOpts = (opts.options && opts.options[optsName]) || {};
                 let mergedOptions = mergePluginOptions(optsName, defaultOpts, pluginOpts);
                 let instance = require(pluginPath)(mergedOptions);
                 if (instance.plugins) {
