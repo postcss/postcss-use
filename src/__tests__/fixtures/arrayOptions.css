@@ -1,0 +1,10 @@
+@use postcss-nobg(["background-repeat"]);
+
+.foo {
+    background-image: url(/foo.jpg);
+}
+
+.bar {
+    background: #bf1942;
+    background-repeat: no-repeat;
+}
