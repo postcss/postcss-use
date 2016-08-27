@@ -1,3 +1,8 @@
+# 2.3.0
+
+* postcss-use now accepts an object of default options to supply to plugins
+  passed to PostCSS via the @use rule (thanks to @rexxars).
+
 # 2.2.0
 
 * postcss-use will now throw a more descriptive error when failing to load a
