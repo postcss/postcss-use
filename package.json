@@ -38,7 +38,7 @@
     "eslint": "^3.1.0",
     "eslint-config-cssnano": "^3.1.2",
     "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-import": "^1.10.3",
+    "eslint-plugin-import": "^2.0.1",
     "nyc": "^10.0.0",
     "postcss-cssnext": "^2.6.0",
     "postcss-discard-comments": "^2.0.3",
