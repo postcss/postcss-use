@@ -27,13 +27,8 @@ const tests = [{
     options: {modules: ['postcss-discard-font-face']},
 }, {
     message: 'should enable autoprefixer from css',
-    fixture: '@use autoprefixer (remove: false; browsers: "> 1%, firefox 32");main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
-    expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:-webkit-box;display:flex;}',
-    options: {modules: ['autoprefixer']},
-}, {
-    message: 'should enable autoprefixer from css, with nested options',
-    fixture: '@use autoprefixer { remove: false; browsers: > 0%, firefox 32 };main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
-    expected: 'main{-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;}',
+    fixture: '@use autoprefixer(remove: false, browsers: "> 1%, firefox 32");main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
+    expected: 'main{-webkit-border-radius:10px;border-radius:10px;display:flex;}',
     options: {modules: ['autoprefixer']},
 }, {
     message: 'should enable autoprefixer from css, with nested stringy options',
@@ -46,10 +41,10 @@ const tests = [{
     expected: 'main{-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;}',
     options: {modules: ['autoprefixer']},
 }, {
-    message: 'should enable postcss-cssnext',
-    fixture: '@use postcss-cssnext;:root{--a: red}h1{color: var(--a)}',
-    expected: 'h1{color: red}',
-    options: {modules: ['postcss-cssnext']},
+    message: 'should enable postcss-nesting',
+    fixture: '@use postcss-nesting;h1{&{color: red}}',
+    expected: 'h1{\n    color: red\n}',
+    options: {modules: ['postcss-nesting']},
 }];
 
 function process (css, options) {
@@ -65,15 +60,19 @@ tests.forEach(({message, fixture, expected, options}) => {
 test('multiple runs', t => {
     const processor = postcss(plugin({modules: ['postcss-discard-comments']}));
 
-    return processor.process('@use postcss-discard-comments;/*test*/').then(({css}) => {
+    return processor.process('@use postcss-discard-comments;/*test*/', {
+        from: `${__dirname}/index.css`,
+    }).then(({css}) => {
         t.deepEqual(css, '');
-    }).then(processor.process('/*test*/').then(({css}) => {
+    }).then(processor.process('/*test*/', {
+        from: `${__dirname}/index.css`,
+    }).then(({css}) => {
         t.deepEqual(css, '/*test*/');
     }));
 });
 
 function shouldThrow (t, css, opts = {}) {
-    t.throws(() => process(css, opts));
+    t.throws(() => process(css, opts, { from: __dirname }));
 }
 
 test('should not support arrows', shouldThrow, '@use postcss-discard-comments(foo => bar)', {modules: ['postcss-discard-comments']});
@@ -84,6 +83,26 @@ test('should not support plugins that are not whitelisted', shouldThrow, '@use p
 test('should not support null', shouldThrow, '@use postcss-discard-comments;', {modules: null});
 test('should not support false', shouldThrow, '@use postcss-discard-comments;', {modules: false});
 test('should not support strings that are not "*"', shouldThrow, '@use postcss-discard-comments;', {modules: 'all'});
+
+test('should ignore unknown options', t => {
+    return postcss(
+        plugin({modules: ['postcss-discard-comments']})
+    ).process('@use postcss-discard-comments(removeAll:something)', {
+        from: `${__dirname}/index.css`,
+    }).then(({css}) => {
+        t.deepEqual(css, '');
+    });
+});
+
+test('should ignore unknown options', t => {
+    return postcss(
+        plugin({modules: ['postcss-discard-comments']})
+    ).process('@use postcss-discard-comments{removeAll:something}', {
+        from: `${__dirname}/index.css`,
+    }).then(({css}) => {
+        t.deepEqual(css, '');
+    });
+});
 
 test('should use the postcss plugin api', t => {
     t.truthy(plugin().postcssVersion, 'should be able to access version');
@@ -131,7 +150,7 @@ test('should be able to specify default options for plugins', t => {
     const outputFile = path.join(__dirname, 'fixtures', 'test.out.css');
     const inputCss = fs.readFileSync(inputFile);
     const options = {
-        nobg: {onlyImages: true},
+        'postcss-nobg': {onlyImages: true},
     };
     return postcss(plugin({modules: '*', resolveFromFile: true, options})).process(inputCss, {
         from: inputFile,

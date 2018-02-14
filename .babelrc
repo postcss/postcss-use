@@ -1,5 +1,5 @@
 {
-  "presets": ["es2015-loose", "stage-0"],
+  "presets": ["env"],
   "plugins": ["add-module-exports"],
   "env": {
     "development": {

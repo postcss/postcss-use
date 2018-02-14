@@ -1,3 +1,11 @@
+# 3.0.0
+
+* postcss-use now uses commas instead of semicolons to separate options in
+  order to support PostCSS 6.
+* Removed: Dependencies on `balanced-match` and `lodash.isplainobject`.
+* Updated: `postcss` from 5 to 6.
+* Updated: `resolve-from` from 2 to 4.
+
 # 2.3.0
 
 * postcss-use now accepts an object of default options to supply to plugins
