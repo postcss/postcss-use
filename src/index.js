@@ -1,122 +1,140 @@
 import path from 'path';
 import postcss from 'postcss';
-import balanced from 'balanced-match';
 import resolveFrom from 'resolve-from';
-import isPlainObject from 'lodash.isplainobject';
 
-const NAME = 'postcss-use';
+const useParamsRegExp = /^([^\(\s]+)(?:\s*\(\s*([\W\w]+)\s*\))?/;
+const optionRegExp = /^\s*([\W\w]+?)\s*:\s*([\W\w]+)\s*$/;
 
-function invalidOption (option) {
-    throw new SyntaxError(`Invalid option '${option}'`);
-}
+export default postcss.plugin('postcss-use', opts => {
+    // options
+    const {
+        modules = [],
+        options = {},
+        resolveFromFile = false,
+    } = Object(opts);
 
-function trim (value) {
-    return value.trim();
-}
+    return (root, result) => {
+        // preserved plugins list
+        const preservedPlugins = result.processor.plugins.slice();
 
-function pluginOptsFromRule (rule) {
-    const options = {};
-    let index = -1;
-    let node;
-    while (node = rule.nodes && rule.nodes[++index]) {
-        if (node.type === 'decl') {
-            try {
-                options[node.prop] = JSON.parse(node.value);
-            } catch (e) {
-                options[node.prop] = node.value;
-            }
-        } else if (node.type === 'rule') {
-            options[node.selector] = pluginOptsFromRule(node);
-        }
-    }
-    return options;
-}
+        // walk @use rules
+        root.walkAtRules('use', rule => {
+            // match plugin and plugin params
+            const paramsMatch = rule.params.match(useParamsRegExp);
 
-function mergePluginOptions (plugin, defaultOpts, specifiedOpts) {
-    // Don't merge anything but objects
-    if (!isPlainObject(specifiedOpts) || !isPlainObject(defaultOpts)) {
-        return specifiedOpts;
-    }
+            if (paramsMatch) {
+                const [ , pluginName, pluginParams = '' ] = paramsMatch;
 
-    // If both the default and specified options are plain objects, we can merge them
-    return {...defaultOpts, ...specifiedOpts};
-}
+                // whether the plugin is whitelisted
+                const isAllowablePlugin = [].concat(modules).some(
+                    mod => typeof mod === 'string'
+                        ? mod === '*' || mod === pluginName
+                    : pluginName.match(mod)
+                );
 
-export default postcss.plugin(NAME, (opts = {}) => {
-    return (css, result) => {
-        if (!opts.modules) {
-            throw new Error(`${NAME} must be configured with a whitelist of plugins.`);
-        }
-        const origin = result.processor.plugins.slice();
-        css.walkAtRules('use', rule => {
-            let pluginOpts;
-            let plugin = trim(rule.params);
-            let match = balanced('(', ')', rule.params);
-            if (!match) {
-                if (~rule.params.indexOf('(')) {
-                    let params = rule.params + ';';
-                    let next = rule.next();
-                    while (next && next.type === 'decl') {
-                        params += String(next);
-                        next = next.next();
-                        next.prev().remove();
-                    }
-                    match = balanced('(', ')', params);
-                } else {
-                    pluginOpts = pluginOptsFromRule(rule);
-                }
-            }
-            if (match) {
-                let body = match.body;
-                if (!body.indexOf('[')) {
-                    if (body.lastIndexOf(']') === body.length - 1) {
-                        pluginOpts = JSON.parse(body);
-                    } else {
-                        invalidOption(body);
+                if (isAllowablePlugin) {
+                    // plugin options
+                    const defaultOpts = Object(options)[pluginName];
+                    const paramOpts = getOptionsFromParams(pluginParams);
+                    const childOpts = getOptionsFromRuleChildren(rule);
+
+                    const pluginOpts = defaultOpts === undefined && Array.isArray(paramOpts)
+                        ? paramOpts
+                    : Object.assign({}, defaultOpts, paramOpts, childOpts);
+
+                    try {
+                        // add plugin to plugins list
+                        const pluginPath = resolveFromFile && rule.source.input.file
+                            ? resolveFrom(
+                                path.dirname(rule.source.input.file),
+                                pluginName
+                            )
+                        : pluginName;
+
+                        const plugin = require(pluginPath)(pluginOpts);
+
+                        result.processor.plugins.push(plugin);
+                    } catch (error) {
+                        throw new Error(`Cannot find module '${pluginName}'`);
                     }
                 } else {
-                    body = body.split(';');
-                    pluginOpts = body.reduce((config, option) => {
-                        let parts = option.split(':').map(trim);
-                        if (!parts[1]) {
-                            invalidOption(parts[0]);
-                        }
-                        config[parts[0]] = JSON.parse(parts[1]);
-                        return config;
-                    }, {});
+                    throw new ReferenceError(`'${ pluginName }' is not a valid PostCSS plugin.`);
                 }
-                plugin = trim(match.pre);
             }
-            // Remove any directory traversal
-            plugin = plugin.replace(/\.\/\\/g, '');
-            if (~opts.modules.indexOf(plugin) || opts.modules === '*') {
-                let pluginPath = plugin;
-                if (opts.resolveFromFile && rule.source.input.file) {
-                    pluginPath = resolveFrom(path.dirname(rule.source.input.file), plugin);
-                }
 
-                if (!pluginPath) {
-                    throw new Error(`Cannot find module '${plugin}'`);
-                }
-
-                let optsName = plugin.replace(/^postcss-/, '');
-                let defaultOpts = (opts.options && opts.options[optsName]) || {};
-                let mergedOptions = mergePluginOptions(optsName, defaultOpts, pluginOpts);
-                let instance = require(pluginPath)(mergedOptions);
-                if (instance.plugins) {
-                    instance.plugins.forEach((p) => {
-                        result.processor.plugins.push(p);
-                    });
-                } else {
-                    result.processor.plugins.push(instance);
-                }
-            } else {
-                throw new ReferenceError(`'${plugin}' is not a valid postcss plugin.`);
-            }
             rule.remove();
         });
-        result.processor.plugins.push(postcss.plugin(`${NAME}#reset`, () => {
-            return (styles, res) => (res.processor.plugins = origin);
-        })());
+
+        result.processor.plugins.push(
+            postcss.plugin('postcss-use#reset', () => {
+                return () => {
+                    // restore preserved plugins list
+                    result.processor.plugins = preservedPlugins;
+                };
+            })()
+        );
     };
 });
+
+// get options from params using functional notation
+function getOptionsFromParams (params) {
+    try {
+        // as json
+        return JSON.parse(params);
+    } catch (error) {
+        // as properties, split as declarations
+        const options = {};
+        const decls = postcss.list.comma(params);
+
+        for (let decl of decls) {
+            if (decl) {
+                const declMatch = decl.match(optionRegExp);
+
+                if (declMatch) {
+                    const [ , property, value ] = declMatch;
+
+                    try {
+                        options[property] = JSON.parse(value);
+                    } catch (error2) {
+                        options[property] = value;
+                    }
+                } else {
+                    throw new SyntaxError(`Options must include a property and value`);
+                }
+            }
+        }
+
+        return options;
+    }
+}
+
+// get options from rule childrem
+function getOptionsFromRuleChildren (rule) {
+    const options = {};
+
+    if (rule.nodes) {
+        for (let node of rule.nodes) {
+            const {
+                prop,
+                selector,
+                type,
+                value,
+            } = node;
+
+            if (type === 'decl') {
+                try {
+                    // as json
+                    options[prop] = JSON.parse(value);
+                } catch (error) {
+                    // as a string
+                    options[prop] = value;
+                }
+            } else if (type === 'rule') {
+                // as nested options
+                options[selector] = getOptionsFromRuleChildren(node);
+            }
+        }
+    }
+
+    return options;
+}

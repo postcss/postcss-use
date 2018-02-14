@@ -2,6 +2,16 @@
 
 > Enable PostCSS plugins directly in your stylesheet.
 
+```css
+@use postcss-preset-env(stage: 0, browsers: "last 2 versions");
+
+h1 {
+  & a {
+    color: red
+  }
+}
+```
+
 ## Install
 
 With [npm](https://npmjs.org/package/postcss-use) do:
@@ -12,11 +22,9 @@ npm install postcss-use --save
 
 ## Example
 
-Both hash maps and arrays are supported; note that functions are not, for
-security reasons. A hash map uses the CSS format of
-`option: value; option2: value2`, but please note that *values* must be valid
-JSON syntax. For example if a module takes a string option, it must be wrapped
-in quotation marks.
+Options may be passed into plugins as a JSON object, an array, a hash map, or
+as declarations. Hash maps will follow the format of
+`option: value, option2: value2`.
 
 ### Input
 
@@ -34,8 +42,8 @@ h1 {
 
 #### Alternative syntax
 
-You may also use configuration blocks that are more *CSS-like*. Note that array
-options cannot be parsed by this method.
+You may also use configuration blocks that are more *CSS-like*. Note that root
+array options cannot be parsed by this method.
 
 ```css
 @use postcss-discard-comments {
@@ -62,46 +70,63 @@ h1 {
 Type: `array|string`
 *Required option*.
 
-You must specify this array of postcss plugins to use, for security purposes.
-This prevents malicious usage of postcss-use in browser environments.
+The `modules` option specifies a list of allowable PostCSS Plugins, expressed
+as a `String`, `Array`, or `RegExp`. By default, all plugins are disabled in
+order to prevent malicious usage in browser environments.
 
 ```js
-postcss([ use({ modules: ['autoprefixer', 'cssnano', 'cssnext']}) ]);
+use({
+  // allow plugins starting with autoprefixer, postcss, precss, and cssnano
+  modules: [
+    /^autoprefixer/,
+    /^postcss/,
+    /^precss/,
+    /^cssnano/
+  ]
+})
 ```
 
-Note that you may also set this option to `'*'` to disable whitelisting of
-modules. This is not recommended for environments where you may be accepting
-arbitrary user input; use at your own risk.
+```js
+use({
+  // allow autoprefixer, postcss-preset-env, and postcss-flexbugs-fixes
+  modules: [ 'autoprefixer', 'postcss-preset-env', 'postcss-flexbugs-fixes' ]
+})
+```
+
+Setting the option to `"*"` will allow PostCSS Use to require any plugins. This
+is not recommended for environments where you may be accepting arbitrary user
+input; use at your own risk.
 
 ##### resolveFromFile
 
 Type: `boolean` (default: `false`)
 
-Set this to true in order to resolve plugins relative to the file that
-referenced them. This enables the usage of different versions of the same
-plugin, for instance.
+The `resolveFromFile` option specifies whether plugins should be resolved
+relative to the file that referenced them. This may be used to enable the usage
+of different versions of the same plugin. By default, it is disabled.
 
 ```js
-postcss([ use({ resolveFromFile: true, modules: '*' }) ]);
+use({
+  resolveFromFile: true
+})
 ```
 
 ##### options
 
 Type: `object` (default: `{}`)
 
-Default options for plugins, keyed by plugin name. If both the default and the specified options are objects, they are merged. Otherwise, the options specified in the CSS are used.
+The `options` option specifies individual options for specific plugins by
+plugin name.
 
 ```js
-postcss([
-    use({
-        modules: '*',
-        options: {
-            autoprefixer: {
-                browsers: ['> 1%', 'IE 7']
-            }
-        }
-    })
-]);
+use({
+  options: {
+    'postcss-preset-env': {
+      stage: 0,
+      browsers: 'last two versions'
+    }
+  }
+})
 ```
 
 ## Usage
