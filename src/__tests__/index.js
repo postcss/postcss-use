@@ -43,7 +43,7 @@ const tests = [{
 }, {
     message: 'should enable postcss-nesting',
     fixture: '@use postcss-nesting;h1{&{color: red}}',
-    expected: 'h1{\n    color: red\n}',
+    expected: 'h1{color: red}',
     options: {modules: ['postcss-nesting']},
 }];
 
