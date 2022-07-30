@@ -39,9 +39,10 @@
     "eslint-plugin-babel": "^4.1.2",
     "eslint-plugin-import": "^2.8.0",
     "nyc": "^11.4.1",
+    "postcss": "^8.0.0",
     "postcss-discard-comments": "^4.0.1",
     "postcss-discard-font-face": "^3.0.0",
-    "postcss-nesting": "^7.0.0"
+    "postcss-nesting": "^10.1.10"
   },
   "homepage": "https://github.com/postcss/postcss-use",
   "author": {
@@ -51,8 +52,10 @@
   },
   "repository": "postcss/postcss-use",
   "dependencies": {
-    "postcss": "^7.0.5",
     "resolve-from": "^4.0.0"
+  },
+  "peerDependencies": {
+    "postcss": "^8.0.0"
   },
   "ava": {
     "require": "babel-register"
