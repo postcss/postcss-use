@@ -68,7 +68,7 @@ const pluginCreator = (opts) => {
 
             result.processor.plugins.push({
                 postcssPlugin: 'postcss-use#reset',
-                Once () {
+                OnceExit () {
                     // restore preserved plugins list
                     result.processor.plugins = preservedPlugins;
                 },
